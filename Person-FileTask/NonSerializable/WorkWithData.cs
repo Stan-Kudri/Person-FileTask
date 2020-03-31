@@ -45,7 +45,6 @@ namespace Person_FileTask
                         string lastName = binaryWriter.ReadString();
                         Sex sex = (Sex) Enum.Parse(typeof(Sex),binaryWriter.ReadString());
                         DateTime bornTime = DateTime.Parse(binaryWriter.ReadString());
-
                         people.Add(new Person(age,firstName,lastName, sex, bornTime));
                     }
 
