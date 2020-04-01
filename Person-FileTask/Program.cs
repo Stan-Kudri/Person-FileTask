@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Person_FileTask.Serializable;
+using System.IO;
 
 namespace Person_FileTask
 {
@@ -18,29 +19,42 @@ namespace Person_FileTask
         static void Main(string[] args)
         {
             Person[] person = new Person[3];
-            person[0] = new Person(22,"Сергей","Широков",Sex.Male,new DateTime(1998,1,15));
-            person[1] = new Person(23, "Дмитрий", "Сущевский", Sex.Male, new DateTime(1996,10,3));
-            person[2] = new Person(23, "Алена", "Сущевская", Sex.Female, new DateTime(1997,3,10));
+            person[0] = new Person(22, "Сергей", "Широков", Sex.Male, new DateTime(1998, 1, 15));
+            person[1] = new Person(23, "Дмитрий", "Сущевский", Sex.Male, new DateTime(1996, 10, 3));
+            person[2] = new Person(23, "Алена", "Сущевская", Sex.Female, new DateTime(1997, 3, 10));
 
             string path = @"X:\person.dat";
             var work = new WorkWithData();
-            work.DataRecording(path, person);
-            var array = work.RetrievingDataFromFile(path);
-            work.OutputArray(array);
+            using (BinaryWriter binaryWriter = new BinaryWriter(File.Open(path, FileMode.OpenOrCreate), Encoding.Default))
+            {
+                work.Serialize(binaryWriter, person);
+            }
+            Person[] array;
+            using (BinaryReader binaryWriter = new BinaryReader(File.Open(path, FileMode.Open), Encoding.Default))
+            {
+                array = work.Desserialize(binaryWriter);
+            }
+            work.Print(array);
 
             Console.WriteLine();
 
-            PersonSerializable[] personSerializables = new PersonSerializable[3];
-            personSerializables[0] = new PersonSerializable(22, "Сергей", "Широков", Sex.Male, new DateTime(1998, 1, 15));
-            personSerializables[1] = new PersonSerializable(23, "Дмитрий", "Сущевский", Sex.Male, new DateTime(1996, 10, 3));
-            personSerializables[2] = new PersonSerializable(23, "Алена", "Сущевская", Sex.Female, new DateTime(1997, 3, 10));
+            Person[] personSerializables = new Person[3];
+            personSerializables[0] = new Person(22, "Сергей", "Широков", Sex.Male, new DateTime(1998, 1, 15));
+            personSerializables[1] = new Person(23, "Дмитрий", "Сущевский", Sex.Male, new DateTime(1996, 10, 3));
+            personSerializables[2] = new Person(23, "Алена", "Сущевская", Sex.Female, new DateTime(1997, 3, 10));
 
             string pathSerializables = @"X:\personSerializables.dat";
             var workSerializables = new WorkWithDataSerializable();
-            workSerializables.DataRecording(pathSerializables, personSerializables);
-            var arraySerializables = workSerializables.RetrievingDataFromFile(pathSerializables);
-            workSerializables.OutputArray(arraySerializables);
-
+            Person[] arraySerializables;
+            using (Stream stream = new FileStream(pathSerializables, FileMode.OpenOrCreate))
+            {
+                workSerializables.Serialize(stream, personSerializables);
+            }
+            using (Stream stream = new FileStream(pathSerializables, FileMode.Open))
+            {
+                arraySerializables = workSerializables.Desserialize(stream);
+            }
+            workSerializables.Print(arraySerializables);
 
             Console.ReadLine();
         }

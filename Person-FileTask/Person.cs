@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Person_FileTask
 {
     [Serializable]
-    class PersonSerializable
+    class Person
     {
         public int Age { get; set; }
         public string FirstName { get; set; }
@@ -15,7 +15,7 @@ namespace Person_FileTask
         public Sex Sex { get; set; }
         public DateTime BornDate { get; set; }
 
-        public PersonSerializable(int age, string firstName, string lastName, Sex sex, DateTime bornDate)
+        public Person(int age, string firstName, string lastName, Sex sex, DateTime bornDate)
         {
             Age = age;
             FirstName = firstName;

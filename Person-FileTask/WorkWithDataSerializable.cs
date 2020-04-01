@@ -12,38 +12,31 @@ namespace Person_FileTask.Serializable
     {
         BinaryFormatter binaryFormatter = new BinaryFormatter();
 
-        public void DataRecording(string path, PersonSerializable[] person)
+        public void Serialize(Stream stream, Person[] person)
         {
             try
             {
-                using (FileStream fileStream = new FileStream(path, FileMode.OpenOrCreate))
-                {
-                    binaryFormatter.Serialize(fileStream, person);
-                }
+                binaryFormatter.Serialize(stream, person);                
             }
             catch
             {
-                Console.WriteLine("Возникло исключение!");
+                
             }
         }
 
-        public PersonSerializable[] RetrievingDataFromFile(string path)
+        public Person[] Desserialize(Stream stream)
         {
             try
             {
-                using (FileStream fileStream = new FileStream(path, FileMode.Open))
-                {
-                    return (PersonSerializable[])binaryFormatter.Deserialize(fileStream);
-                }
+                return (Person[])binaryFormatter.Deserialize(stream);
             }
             catch
             {
-                Console.WriteLine("Возникло исключение!");
                 return null;
             }
         }
 
-        public void OutputArray(PersonSerializable[] person)
+        public void Print(Person[] person)
         {
             foreach (var people in person)
             {
