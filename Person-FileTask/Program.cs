@@ -24,15 +24,15 @@ namespace Person_FileTask
             person[2] = new Person(23, "Алена", "Сущевская", Sex.Female, new DateTime(1997, 3, 10));
 
             string path = @"X:\person.dat";
-            var work = new WorkWithData();
-            using (BinaryWriter binaryWriter = new BinaryWriter(File.Open(path, FileMode.OpenOrCreate), Encoding.Default))
+            var work = new StandartSerialization();
+            using (Stream stream = new FileStream(path, FileMode.OpenOrCreate))
             {
-                work.Serialize(binaryWriter, person);
+                work.Serialize(stream, person);
             }
             Person[] array;
-            using (BinaryReader binaryWriter = new BinaryReader(File.Open(path, FileMode.Open), Encoding.Default))
+            using (Stream stream = new FileStream(path, FileMode.Open))
             {
-                array = work.Desserialize(binaryWriter);
+                array = work.Desserialize(stream);
             }
             work.Print(array);
 
@@ -44,7 +44,7 @@ namespace Person_FileTask
             personSerializables[2] = new Person(23, "Алена", "Сущевская", Sex.Female, new DateTime(1997, 3, 10));
 
             string pathSerializables = @"X:\personSerializables.dat";
-            var workSerializables = new WorkWithDataSerializable();
+            var workSerializables = new CustomSerialization();
             Person[] arraySerializables;
             using (Stream stream = new FileStream(pathSerializables, FileMode.OpenOrCreate))
             {

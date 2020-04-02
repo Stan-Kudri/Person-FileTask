@@ -8,7 +8,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 namespace Person_FileTask.Serializable
 {
-    class WorkWithDataSerializable
+    class CustomSerialization:ISerialization
     {
         BinaryFormatter binaryFormatter = new BinaryFormatter();
 

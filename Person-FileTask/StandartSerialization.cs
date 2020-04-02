@@ -7,12 +7,13 @@ using System.IO;
 
 namespace Person_FileTask
 {
-    class WorkWithData
+    class StandartSerialization:ISerialization
     {
-        public void Serialize(BinaryWriter binaryWriter, Person[] person)
+        public void Serialize(Stream stream, Person[] person)
         {
             try
             {
+                BinaryWriter binaryWriter = new BinaryWriter(stream);
                 foreach(Person date in person)
                 {
                     binaryWriter.Write(date.Age);
@@ -27,18 +28,19 @@ namespace Person_FileTask
             }
         }
 
-        public Person[] Desserialize(BinaryReader binaryWriter)
+        public Person[] Desserialize(Stream stream)
         {
             try
             {
+                BinaryReader binaryReader = new BinaryReader(stream);
                 List<Person> people = new List<Person>();
-                while (binaryWriter.PeekChar()>-1)
+                while (binaryReader.PeekChar()>-1)
                 {
-                    int age = binaryWriter.ReadInt32();
-                    string firstName = binaryWriter.ReadString();
-                    string lastName = binaryWriter.ReadString();
-                    Sex sex = (Sex) Enum.Parse(typeof(Sex),binaryWriter.ReadString());
-                    DateTime bornTime = DateTime.Parse(binaryWriter.ReadString());
+                    int age = binaryReader.ReadInt32();
+                    string firstName = binaryReader.ReadString();
+                    string lastName = binaryReader.ReadString();
+                    Sex sex = (Sex) Enum.Parse(typeof(Sex), binaryReader.ReadString());
+                    DateTime bornTime = DateTime.Parse(binaryReader.ReadString());
                     people.Add(new Person(age,firstName,lastName, sex, bornTime));
                 }
 
