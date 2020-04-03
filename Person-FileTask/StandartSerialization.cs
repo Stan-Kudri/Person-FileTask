@@ -18,8 +18,8 @@ namespace Person_FileTask
                 {
                     binaryWriter.Write(date.Age);
                     binaryWriter.Write(date.FirstName);
-                    binaryWriter.Write(date.LastName);
-                    binaryWriter.Write(date.Sex.ToString());
+                    binaryWriter.Write(date.LastName);                    
+                    binaryWriter.Write((int)date.Sex);
                     binaryWriter.Write(date.BornDate.ToString());
                 }
             }
@@ -34,29 +34,20 @@ namespace Person_FileTask
             {
                 BinaryReader binaryReader = new BinaryReader(stream);
                 List<Person> people = new List<Person>();
-                while (binaryReader.PeekChar()>-1)
+                while (binaryReader.PeekChar() > -1)
                 {
                     int age = binaryReader.ReadInt32();
                     string firstName = binaryReader.ReadString();
-                    string lastName = binaryReader.ReadString();
-                    Sex sex = (Sex) Enum.Parse(typeof(Sex), binaryReader.ReadString());
-                    DateTime bornTime = DateTime.Parse(binaryReader.ReadString());
+                    string lastName = binaryReader.ReadString();                    
+                    Sex sex = (Sex) binaryReader.ReadInt32();                    
+                    DateTime bornTime = DateTime.Parse(binaryReader.ReadString());                    
                     people.Add(new Person(age,firstName,lastName, sex, bornTime));
                 }
-
                 return people.ToArray();
             }
             catch
-            {
+            {                
                 return null;
-            }
-        }
-
-        public void Print(Person[] person)
-        {
-            foreach(var people in person)
-            {
-                Console.WriteLine($"{people.Age} - {people.FirstName} - {people.LastName} - {people.Sex.ToString()} - {people.BornDate.ToString()}");
             }
         }
     }

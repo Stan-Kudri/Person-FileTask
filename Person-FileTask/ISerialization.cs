@@ -12,8 +12,6 @@ namespace Person_FileTask
         void Serialize(Stream stream, Person[] person);
 
         Person[] Desserialize(Stream stream);
-
-        void Print(Person[] person);
         
     }
 }
