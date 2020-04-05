@@ -26,12 +26,12 @@ namespace Person_FileTask
 
         static void Main(string[] args)
         {
-            //Бинарное чтение и запись
-
             Person[] person = new Person[3];
             person[0] = new Person(22, "Сергей", "Широков", Sex.Male, new DateTime(1998, 1, 15));
             person[1] = new Person(23, "Дмитрий", "Сущевский", Sex.Male, new DateTime(1996, 10, 3));
             person[2] = new Person(23, "Алена", "Сущевская", Sex.Female, new DateTime(1997, 3, 10));
+
+            //Бинарное чтение и запись
 
             string path = @"X:\person.dat";
             var work = new StandartSerialization();
@@ -49,18 +49,13 @@ namespace Person_FileTask
             Console.WriteLine();
 
             //Бинарная сериализация
-
-            Person[] personSerializables = new Person[3];
-            personSerializables[0] = new Person(22, "Сергей", "Широков", Sex.Male, new DateTime(1998, 1, 15));
-            personSerializables[1] = new Person(23, "Дмитрий", "Сущевский", Sex.Male, new DateTime(1996, 10, 3));
-            personSerializables[2] = new Person(23, "Алена", "Сущевская", Sex.Female, new DateTime(1997, 3, 10));
-
+            
             string pathSerializables = @"X:\personSerializables.dat";
             var workSerializables = new CustomSerialization();
             Person[] arraySerializables;
             using (Stream stream = new FileStream(pathSerializables, FileMode.OpenOrCreate))
             {
-                workSerializables.Serialize(stream, personSerializables);
+                workSerializables.Serialize(stream, person);
             }
             using (Stream stream = new FileStream(pathSerializables, FileMode.Open))
             {
@@ -72,23 +67,35 @@ namespace Person_FileTask
 
             //xml сериализация
 
-            Person[] personXML = new Person[3];
-            personXML[0] = new Person(22, "Сергей", "Широков", Sex.Male, new DateTime(1998, 1, 15));
-            personXML[1] = new Person(23, "Дмитрий", "Сущевский", Sex.Male, new DateTime(1996, 10, 3));
-            personXML[2] = new Person(23, "Алена", "Сущевская", Sex.Female, new DateTime(1997, 3, 10));
-            
             string pathXML = @"X:\person.xml";
-            var workXML = new XMLSerializer();
+            var workXML = new XMLSerialization();
             Person[] arrayXML;
             using(Stream stream = new FileStream(pathXML, FileMode.OpenOrCreate))
             {
-                workXML.Serialize(stream, personXML);
+                workXML.Serialize(stream, person);
             }
             using (Stream stream = new FileStream(pathXML, FileMode.Open))
             {
                 arrayXML = workXML.Desserialize(stream);
             }
             Print(arrayXML);
+
+            Console.WriteLine();
+
+            //json сериализация
+
+            string pathJSON = @"X:\person.json";
+            var workJSON = new XMLSerialization();
+            Person[] arrayJSON;
+            using (Stream stream = new FileStream(pathJSON, FileMode.OpenOrCreate))
+            {
+                workJSON.Serialize(stream, person);
+            }
+            using (Stream stream = new FileStream(pathJSON, FileMode.Open))
+            {
+                arrayJSON = workJSON.Desserialize(stream);
+            }
+            Print(arrayJSON);
 
             Console.ReadLine();
         }

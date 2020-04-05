@@ -4,41 +4,36 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
-using System.Xml.Serialization;
+using Newtonsoft.Json;
+using System.Runtime.Serialization.Json;
 
-namespace Person_FileTask
+namespace Person_FileTask.Serialization
 {
-    
-
-    class XMLSerializer:ISerialization
+    class JSONSerialization:ISerialization
     {
-        XmlSerializer xMLSerializer = new XmlSerializer(typeof(Person[]));
+        DataContractJsonSerializer ContractJsonSerializer = new DataContractJsonSerializer(typeof(Person[]));
 
         public void Serialize(Stream stream, Person[] person)
         {
-            
             try
-            {                
-                xMLSerializer.Serialize(stream, person);
+            {
+                ContractJsonSerializer.WriteObject(stream, person);
             }
             catch
             {
-
             }
         }
 
         public Person[] Desserialize(Stream stream)
         {
-            
             try
             {                
-                return (Person[])xMLSerializer.Deserialize(stream);
+                return (Person[])ContractJsonSerializer.ReadObject(stream);
             }
             catch
             {
                 return null;
             }
         }
-
     }
 }
